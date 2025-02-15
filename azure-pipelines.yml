@@ -18,7 +18,9 @@ steps:
 - task: UseDotNet@2
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
   inputs:
+    packageType: 'sdk'
     version: '$(dotnetSdkVersion)'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - task: NuGetToolInstaller@0
   inputs:
@@ -29,6 +31,10 @@ steps:
   inputs:
     verbose: false
 
+- script: |
+      nuget restore YourSolution.sln
+  displayName: "Restore NuGet Packages"
+
 - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
   displayName: 'Compile Sass assets'
 
@@ -38,6 +44,8 @@ steps:
 - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
   displayName: 'Write build info'
   workingDirectory: $(wwwrootDir)
+
+
 
 - task: NuGetCommand@2
   displayName: 'Restore project dependencies'
