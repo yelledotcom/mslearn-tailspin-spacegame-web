@@ -2,7 +2,7 @@ trigger:
 - '*'
 
 pool:
-  name: 'MyAgentPool'
+  vmImage: 'ubuntu-20.04'
   demands:
   - npm
 
@@ -12,28 +12,15 @@ variables:
   dotnetSdkVersion: '6.x'
 
 steps:
-- checkout: self
-  clean: true
-
 - task: UseDotNet@2
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
   inputs:
-    packageType: 'sdk'
     version: '$(dotnetSdkVersion)'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-
-- task: NuGetToolInstaller@0
-  inputs:
-    versionSpec: '5.9.1'
 
 - task: Npm@1
   displayName: 'Run npm install'
   inputs:
     verbose: false
-
-- script: |
-      nuget restore YourSolution.sln
-  displayName: "Restore NuGet Packages"
 
 - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
   displayName: 'Compile Sass assets'
@@ -45,15 +32,11 @@ steps:
   displayName: 'Write build info'
   workingDirectory: $(wwwrootDir)
 
-
-
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   displayName: 'Restore project dependencies'
   inputs:
     command: 'restore'
-    restoreSolution: '**/*.sln'
-    feedsToUse: 'select'
-    vstsFeed: '$(System.TeamProject)/Tailspin.SpaceGame.Web.Models'
+    projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build the project - $(buildConfiguration)'
