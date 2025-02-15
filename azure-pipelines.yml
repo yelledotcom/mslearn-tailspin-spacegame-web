@@ -13,8 +13,8 @@ variables:
 
 steps:
 - checkout: self
-    clean: true
-    
+  clean: true
+
 - task: UseDotNet@2
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
   inputs:
