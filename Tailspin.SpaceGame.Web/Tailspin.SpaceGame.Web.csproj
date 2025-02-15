@@ -30,7 +30,7 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
+  <!-- <ItemGroup>
     <PackageReference Include="Tailspin.SpaceGame.Web.Models" Version="1.0.0-CI-20250214-190513" />
-  </ItemGroup>
+  </ItemGroup> -->
 </Project>
